@@ -1,6 +1,6 @@
 #include "headers.h"
 
-
+#define maxSnakeLength 1534
 
 void initScr();
 void gameLoop();
@@ -12,9 +12,9 @@ int h,w;
 
 struct Pos_t
 {
-	int x=100;
-	int y=100;
-} snakePos [1534];
+	int x=2;
+	int y=1;
+} snakePos [maxSnakeLength];
 
 
 WINDOW* win;
@@ -40,7 +40,7 @@ int main()
 
 void printBorder()
 {
-	for(int i=0;i<w+2;i++)
+	for(int i=1;i<w+2;i++)
 	{
 		mvwaddch(win, 1,i,ACS_BLOCK);
 		waddch(win, ACS_BLOCK);
@@ -48,7 +48,7 @@ void printBorder()
 		waddch(win, ACS_BLOCK);
 		waddch(win, ACS_BLOCK);
 	}
-	for(int i=0;i<h+2;i++)
+	for(int i=1;i<h+2;i++)
 	{
 		mvwaddch(win, i, 1, ACS_BLOCK);
 		waddch(win, ACS_BLOCK);
@@ -75,7 +75,7 @@ void initScr()
 void gameLoop()
 {
 	bool quit = false, add = false, exists = false, pause = false, lost = false, won = false;
-	int dir = 2, SnakeLength = 5, t_count = 0;
+	int dir = 2, SnakeLength = 5;
 	Pos_t apple;
 	snakePos[0].x=11;
 	snakePos[0].y=11;
@@ -153,7 +153,7 @@ void gameLoop()
 			mvwaddstr(win, 0, 40, "GAME OVER");
 			}
 		}
-		if(SnakeLength == 1534)
+		if(SnakeLength == maxSnakeLength)
 		{
 			won = true;
 			mvwaddstr(win, 0, 40, "YOU WON");
@@ -186,16 +186,30 @@ void moveSnake(int dir, int& SnakeLength, bool add)
 	if(!add)
 	{
 		wmove(win, snakePos[SnakeLength].y, snakePos[SnakeLength].x);
-		waddch(win, ACS_BLOCK | COLOR_PAIR(3));
-		waddch(win, ACS_BLOCK | COLOR_PAIR(3));
+		if(snakePos[SnakeLength].y < 3 && snakePos[SnakeLength].x < 3)
+		{
+			waddch(win, ACS_BLOCK);
+			waddch(win, ACS_BLOCK);
+		}else
+		{
+			waddch(win, ACS_BLOCK | COLOR_PAIR(3));
+			waddch(win, ACS_BLOCK | COLOR_PAIR(3));
+		}
 	}else{SnakeLength++;}
 	for(int i=SnakeLength;i>0;i--)
 	{
 		snakePos[i].x = snakePos[i-1].x;	
 		snakePos[i].y = snakePos[i-1].y;
 		wmove(win, snakePos[i].y, snakePos[i].x);
-		waddch(win, ACS_BLOCK | COLOR_PAIR(1));	
-		waddch(win, ACS_BLOCK | COLOR_PAIR(1));
+		if(snakePos[i].y < 3 && snakePos[i].x < 3)
+		{
+			waddch(win, ACS_BLOCK);	
+			waddch(win, ACS_BLOCK);	
+		}else
+		{
+			waddch(win, ACS_BLOCK | COLOR_PAIR(1));	
+			waddch(win, ACS_BLOCK | COLOR_PAIR(1));
+		}
 	}
 	switch(dir)
 	{
