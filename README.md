@@ -19,7 +19,7 @@ Running into the snake is a loss.
 
 Every apple eaten adds to snake length.
 
-The game is won at a snake Lenght of 1517.
+The game is won at a snake lenght of 1517.
 
 ## Compiling
 
